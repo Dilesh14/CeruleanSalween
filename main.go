@@ -27,7 +27,7 @@ func getDb(w http.ResponseWriter, r *http.Request) {
 func handleRequest() {
 	envVarError := godotenv.Load()
 	if envVarError != nil {
-		log.Fatal("Error loading .env file")
+		log.Fatal("Error loading .env file", envVarError)
 	}
 
 	port := os.Getenv("PORT")
