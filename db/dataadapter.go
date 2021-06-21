@@ -2,7 +2,6 @@ package dataadapter
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"time"
 
@@ -31,6 +30,5 @@ func LoadAllDatabases(uri string) []string {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(databases)
 	return databases
 }
