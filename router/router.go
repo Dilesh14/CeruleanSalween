@@ -36,19 +36,31 @@ func createUser(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "POST":
 		hContentType := r.Header.Get("Content-Type")
-		if hContentType != "application/json" {
+		if hContentType != "application/json" && hContentType != "application/x-www-form-urlencoded" {
 			w.WriteHeader(http.StatusUnsupportedMediaType)
 			return
 		}
 		var u CUserReq
 
-		decoder := json.NewDecoder(r.Body)
-		decoder.DisallowUnknownFields()
-		err := decoder.Decode(&u)
+		if hContentType == "application/x-www-form-urlencoded" {
+			err := r.ParseForm()
+			if err != nil {
+				w.WriteHeader(http.StatusBadRequest)
+				return
+			}
+			u.Email = r.Form.Get("email")
+			u.Username = r.Form.Get("fname") + " " + r.Form.Get("lname")
+			u.Password = r.Form.Get("password")
+			u.PhoneNumber = "came from forms"
+		} else {
 
-		if err != nil {
-			w.WriteHeader(http.StatusBadRequest)
-			return
+			decoder := json.NewDecoder(r.Body)
+			decoder.DisallowUnknownFields()
+			err := decoder.Decode(&u)
+			if err != nil {
+				w.WriteHeader(http.StatusBadRequest)
+				return
+			}
 		}
 
 		user := dataadapter.User{
@@ -72,6 +84,7 @@ func HandleRoutes() {
 	http.HandleFunc("/", homePage)
 	http.HandleFunc("/db", getDb)
 	http.HandleFunc("/users/create", createUser)
+	http.HandleFunc("/signup", createUser)
 	fs := http.FileServer(http.Dir("content/"))
 
 	http.Handle("/static/", http.StripPrefix("/static/", fs))

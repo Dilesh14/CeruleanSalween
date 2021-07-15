@@ -14,16 +14,16 @@
                 <span class="panel-divider-content">or</span>
                 <span class="panel-divider-line"></span>
             </div>
-            <form class="sign-up-form">
+            <form class="sign-up-form" method="POST" action="/signup">
                 <div class="sign-up-form__first-row">
-                    <input type="text" class="sign-up-form__input" placeholder="First name">
-                    <input type="text" class="sign-up-form__input" placeholder="Last name">
+                    <input type="text" class="sign-up-form__input" name = "fname" required placeholder="First name">
+                    <input type="text" class="sign-up-form__input" name = "lname" required placeholder="Last name">
                 </div>
                 <div class="sign-up-form__second-row">
-                    <input type="text" class="sign-up-form__input" placeholder="Email address">
-                    <input type="text" class="sign-up-form__input" placeholder="Create password">
+                    <input type="text" class="sign-up-form__input" name = "email" required placeholder="Email address">
+                    <input type="password" class="sign-up-form__input" name = "password" required placeholder="Create password">
                 </div>
-                <input type="button" class="form-submition" value="Continue" />
+                <input type="submit" class="form-submition" value="Continue" />
             </form>   
         </div>
     </body>
