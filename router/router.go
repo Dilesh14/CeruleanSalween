@@ -71,9 +71,15 @@ func createUser(w http.ResponseWriter, r *http.Request) {
 		}
 		uri := os.Getenv("mongoDbConnectionString")
 		dataadapter.SetDbConnectionString(uri)
-		dataadapter.CreateUser(user)
-		w.WriteHeader(http.StatusOK)
-		w.Write([]byte(`{"message": "user created"}`))
+
+		if dataadapter.CreateUser(user) {
+			w.WriteHeader(http.StatusOK)
+			w.Write([]byte(`{"message": "user created", "status":4 }`))
+		} else {
+			w.WriteHeader(http.StatusOK)
+			w.Write([]byte(`{"message":"email address already exists", "status": 99 }`))
+		}
+
 	default:
 		w.WriteHeader(http.StatusNotFound)
 		w.Write([]byte(`{"message": "not found"}`))

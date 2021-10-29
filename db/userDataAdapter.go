@@ -25,7 +25,7 @@ func SetDbConnectionString(cs string) {
 	connectionString = cs
 }
 
-func CreateUser(user User) {
+func CreateUser(user User) bool {
 	user.ExternalId = uuid.NewString()
 
 	passHash, err := services.HashPassword(user.Password)
@@ -46,11 +46,23 @@ func CreateUser(user User) {
 	}
 	ctx, _ := context.WithTimeout(context.Background(), 15*time.Second)
 	coll := client.Database("passManager").Collection("Users")
+	proxy := client.Database("passManager").Collection("Proxy_Users")
+
+	pResult, pErr := proxy.InsertOne(ctx, user)
+
+	if pErr != nil {
+		return false
+	}
+
+	log.Println("inserted the user to proxy:", pResult.InsertedID)
+
 	result, inserErr := coll.InsertOne(ctx, user)
 	if inserErr != nil {
 		log.Fatal(inserErr)
 	}
+
 	log.Println("inserted new user, new userId: ", result.InsertedID)
+	return true
 }
 
 func DeleteUser(id string) {
