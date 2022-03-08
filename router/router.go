@@ -94,4 +94,7 @@ func HandleRoutes() {
 	fs := http.FileServer(http.Dir("content/"))
 
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
+
+	renJS := http.FileServer(http.Dir("content/RenJSQuickstart"))
+	http.Handle("/gnovel/", http.StripPrefix("/gnovel/", renJS))
 }
