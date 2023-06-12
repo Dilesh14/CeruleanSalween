@@ -87,14 +87,18 @@ func createUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func HandleRoutes() {
-	http.HandleFunc("/", homePage)
+	http.HandleFunc("/go/home", homePage)
 	http.HandleFunc("/db", getDb)
 	http.HandleFunc("/users/create", createUser)
 	http.HandleFunc("/signup", createUser)
 	fs := http.FileServer(http.Dir("content/"))
 
-	http.Handle("/static/", http.StripPrefix("/static/", fs))
+	http.Handle("/content/", http.StripPrefix("/content/", fs))
 
 	renJS := http.FileServer(http.Dir("content/RenJSQuickstart"))
 	http.Handle("/gnovel/", http.StripPrefix("/gnovel/", renJS))
+
+	fs_react_app := http.FileServer(http.Dir("content/sketchi"))
+	//sketchi := http.FileServer(http.Dir("content/sketchi"))
+	http.Handle("/", fs_react_app)
 }
